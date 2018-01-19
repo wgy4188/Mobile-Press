@@ -4,19 +4,19 @@
 *                                          The Real-Time Kernel
 *                                             TIME MANAGEMENT
 *
-*                              (c) Copyright 1992-2007, Micrium, Weston, FL
+*                              (c) Copyright 1992-2010, Micrium, Weston, FL
 *                                           All Rights Reserved
 *
 * File    : OS_TIME.C
 * By      : Jean J. Labrosse
-* Version : V2.86
+* Version : V2.92
 *
 * LICENSING TERMS:
 * ---------------
-*   uC/OS-II is provided in source form for FREE evaluation, for educational use or for peaceful research.  
-* If you plan on using  uC/OS-II  in a commercial product you need to contact Micriµm to properly license 
-* its use in your product. We provide ALL the source code for your convenience and to help you experience 
-* uC/OS-II.   The fact that the  source is provided does  NOT  mean that you can use it without  paying a 
+*   uC/OS-II is provided in source form for FREE evaluation, for educational use or for peaceful research.
+* If you plan on using  uC/OS-II  in a commercial product you need to contact Micriµm to properly license
+* its use in your product. We provide ALL the source code for your convenience and to help you experience
+* uC/OS-II.   The fact that the  source is provided does  NOT  mean that you can use it without  paying a
 * licensing fee.
 *********************************************************************************************************
 */
@@ -27,7 +27,7 @@
 
 /*
 *********************************************************************************************************
-*                                DELAY TASK 'n' TICKS   (n from 0 to 65535)
+*                                       DELAY TASK 'n' TICKS
 *
 * Description: This function is called to delay execution of the currently running task until the
 *              specified number of system ticks expires.  This, of course, directly equates to delaying
@@ -41,24 +41,27 @@
 *********************************************************************************************************
 */
 
-void  OSTimeDly (INT16U ticks)
+void  OSTimeDly (INT32U ticks)
 {
     INT8U      y;
-#if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register           */
-    OS_CPU_SR  cpu_sr = 0;
+#if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
+    OS_CPU_SR  cpu_sr = 0u;
 #endif
 
 
 
-    if (OSIntNesting > 0) {                      /* See if trying to call from an ISR                  */
+    if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
         return;
     }
-    if (ticks > 0) {                             /* 0 means no delay!                                  */
+    if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
+        return;
+    }
+    if (ticks > 0u) {                            /* 0 means no delay!                                  */
         OS_ENTER_CRITICAL();
         y            =  OSTCBCur->OSTCBY;        /* Delay current task                                 */
-        OSRdyTbl[y] &= ~OSTCBCur->OSTCBBitX;
-        if (OSRdyTbl[y] == 0) {
-            OSRdyGrp &= ~OSTCBCur->OSTCBBitY;
+        OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
+        if (OSRdyTbl[y] == 0u) {
+            OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
         }
         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                                  */
         OS_EXIT_CRITICAL();
@@ -77,7 +80,7 @@ void  OSTimeDly (INT16U ticks)
 * Arguments  : hours     specifies the number of hours that the task will be delayed (max. is 255)
 *              minutes   specifies the number of minutes (max. 59)
 *              seconds   specifies the number of seconds (max. 59)
-*              milli     specifies the number of milliseconds (max. 999)
+*              ms        specifies the number of milliseconds (max. 999)
 *
 * Returns    : OS_ERR_NONE
 *              OS_ERR_TIME_INVALID_MINUTES
@@ -92,48 +95,46 @@ void  OSTimeDly (INT16U ticks)
 *********************************************************************************************************
 */
 
-#if OS_TIME_DLY_HMSM_EN > 0
-INT8U  OSTimeDlyHMSM (INT8U hours, INT8U minutes, INT8U seconds, INT16U ms)
+#if OS_TIME_DLY_HMSM_EN > 0u
+INT8U  OSTimeDlyHMSM (INT8U   hours,
+                      INT8U   minutes,
+                      INT8U   seconds,
+                      INT16U  ms)
 {
     INT32U ticks;
-    INT16U loops;
 
 
-    if (OSIntNesting > 0) {                      /* See if trying to call from an ISR                  */
+    if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
         return (OS_ERR_TIME_DLY_ISR);
     }
-#if OS_ARG_CHK_EN > 0
-    if (hours == 0) {
-        if (minutes == 0) {
-            if (seconds == 0) {
-                if (ms == 0) {
+    if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
+        return (OS_ERR_SCHED_LOCKED);
+    }
+#if OS_ARG_CHK_EN > 0u
+    if (hours == 0u) {
+        if (minutes == 0u) {
+            if (seconds == 0u) {
+                if (ms == 0u) {
                     return (OS_ERR_TIME_ZERO_DLY);
                 }
             }
         }
     }
-    if (minutes > 59) {
+    if (minutes > 59u) {
         return (OS_ERR_TIME_INVALID_MINUTES);    /* Validate arguments to be within range              */
     }
-    if (seconds > 59) {
+    if (seconds > 59u) {
         return (OS_ERR_TIME_INVALID_SECONDS);
     }
-    if (ms > 999) {
+    if (ms > 999u) {
         return (OS_ERR_TIME_INVALID_MS);
     }
 #endif
                                                  /* Compute the total number of clock ticks required.. */
                                                  /* .. (rounded to the nearest tick)                   */
-    ticks = ((INT32U)hours * 3600L + (INT32U)minutes * 60L + (INT32U)seconds) * OS_TICKS_PER_SEC
-          + OS_TICKS_PER_SEC * ((INT32U)ms + 500L / OS_TICKS_PER_SEC) / 1000L;
-    loops = (INT16U)(ticks >> 16);               /* Compute the integral number of 65536 tick delays   */
-    ticks = ticks & 0xFFFFL;                     /* Obtain  the fractional number of ticks             */
-    OSTimeDly((INT16U)ticks);
-    while (loops > 0) {
-        OSTimeDly((INT16U)32768u);
-        OSTimeDly((INT16U)32768u);
-        loops--;
-    }
+    ticks = ((INT32U)hours * 3600uL + (INT32U)minutes * 60uL + (INT32U)seconds) * OS_TICKS_PER_SEC
+          + OS_TICKS_PER_SEC * ((INT32U)ms + 500uL / OS_TICKS_PER_SEC) / 1000uL;
+    OSTimeDly(ticks);
     return (OS_ERR_NONE);
 }
 #endif
@@ -147,12 +148,6 @@ INT8U  OSTimeDlyHMSM (INT8U hours, INT8U minutes, INT8U seconds, INT16U ms)
 *              task that is waiting for an event with timeout.  This would make the task look
 *              like a timeout occurred.
 *
-*              Also, you cannot resume a task that has called OSTimeDlyHMSM() with a combined time that
-*              exceeds 65535 clock ticks.  In other words, if the clock tick runs at 100 Hz then, you will
-*              not be able to resume a delayed task that called OSTimeDlyHMSM(0, 10, 55, 350) or higher:
-*
-*                  (10 Minutes * 60 + 55 Seconds + 0.35) * 100 ticks/second.
-*
 * Arguments  : prio                      specifies the priority of the task to resume
 *
 * Returns    : OS_ERR_NONE               Task has been resumed
@@ -163,12 +158,12 @@ INT8U  OSTimeDlyHMSM (INT8U hours, INT8U minutes, INT8U seconds, INT16U ms)
 *********************************************************************************************************
 */
 
-#if OS_TIME_DLY_RESUME_EN > 0
+#if OS_TIME_DLY_RESUME_EN > 0u
 INT8U  OSTimeDlyResume (INT8U prio)
 {
     OS_TCB    *ptcb;
-#if OS_CRITICAL_METHOD == 3                                    /* Storage for CPU status register      */
-    OS_CPU_SR  cpu_sr = 0;
+#if OS_CRITICAL_METHOD == 3u                                   /* Storage for CPU status register      */
+    OS_CPU_SR  cpu_sr = 0u;
 #endif
 
 
@@ -186,12 +181,12 @@ INT8U  OSTimeDlyResume (INT8U prio)
         OS_EXIT_CRITICAL();
         return (OS_ERR_TASK_NOT_EXIST);                        /* The task does not exist              */
     }
-    if (ptcb->OSTCBDly == 0) {                                 /* See if task is delayed               */
+    if (ptcb->OSTCBDly == 0u) {                                /* See if task is delayed               */
         OS_EXIT_CRITICAL();
         return (OS_ERR_TIME_NOT_DLY);                          /* Indicate that task was not delayed   */
     }
 
-    ptcb->OSTCBDly = 0;                                        /* Clear the time delay                 */
+    ptcb->OSTCBDly = 0u;                                       /* Clear the time delay                 */
     if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY) {
         ptcb->OSTCBStat     &= ~OS_STAT_PEND_ANY;              /* Yes, Clear status flag               */
         ptcb->OSTCBStatPend  =  OS_STAT_PEND_TO;               /* Indicate PEND timeout                */
@@ -223,12 +218,12 @@ INT8U  OSTimeDlyResume (INT8U prio)
 *********************************************************************************************************
 */
 
-#if OS_TIME_GET_SET_EN > 0
+#if OS_TIME_GET_SET_EN > 0u
 INT32U  OSTimeGet (void)
 {
     INT32U     ticks;
-#if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register           */
-    OS_CPU_SR  cpu_sr = 0;
+#if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
+    OS_CPU_SR  cpu_sr = 0u;
 #endif
 
 
@@ -252,11 +247,11 @@ INT32U  OSTimeGet (void)
 *********************************************************************************************************
 */
 
-#if OS_TIME_GET_SET_EN > 0
+#if OS_TIME_GET_SET_EN > 0u
 void  OSTimeSet (INT32U ticks)
 {
-#if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register           */
-    OS_CPU_SR  cpu_sr = 0;
+#if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
+    OS_CPU_SR  cpu_sr = 0u;
 #endif
 
 
