@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\App;..\Bsp;..\Fwlib\stdlib\inc;..\uCos_ii\uCSource;..\uCos_ii\uCCPU;..\uCos_ii\uCPort;..\uCos_ii;..\Fwlib</IncludePath>
+              <IncludePath>..\App;..\Bsp;..\Fwlib\stdlib\inc;..\uCos_ii\uCSource;..\uCos_ii\uCCPU;..\uCos_ii\uCPort;..\uCos_ii;..\Fwlib;..\uCos_ii\uCLib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -404,6 +404,11 @@
               <FileType>1</FileType>
               <FilePath>..\Bsp\bsp.c</FilePath>
             </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\gpio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -414,6 +419,11 @@
               <FileType>1</FileType>
               <FilePath>..\Fwlib\stdlib\src\stm32f10x_rcc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_gpio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -423,6 +433,96 @@
               <FileName>startup_stm32f10x_hd.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Fwlib\startup\arm\startup_stm32f10x_hd.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCCPU</GroupName>
+          <Files>
+            <File>
+              <FileName>cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\uCos_ii\uCCPU\cpu_a.asm</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCCPU\cpu_c.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCPort</GroupName>
+          <Files>
+            <File>
+              <FileName>os_cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\uCos_ii\uCPort\os_cpu_a.asm</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCPort\os_cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_dbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCPort\os_dbg.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCSource</GroupName>
+          <Files>
+            <File>
+              <FileName>os_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_flag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_flag.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_q.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_q.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\uCos_ii\uCSource\os_tmr.c</FilePath>
             </File>
           </Files>
         </Group>

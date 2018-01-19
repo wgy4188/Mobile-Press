@@ -1,12 +1,35 @@
 
-#include <bsp.h>
-
+#include "bsp.h"
+#include "gpio.h"
 
 void  BSP_Init (void)
 {
-   
-   
+		RCC_Configuration();
+		SysTick_Init();
+		GpioCfg();
+		
+		return;
 }
+
+void RCC_Configuration(void)
+{
+		SystemInit();
+	
+		return;
+}
+
+void SysTick_Init(void)
+{
+    RCC_ClocksTypeDef  rcc_clocks;
+    uint32_t cnts;
+
+    RCC_GetClocksFreq(&rcc_clocks);
+    cnts = (uint32_t)rcc_clocks.HCLK_Frequency/OS_TICKS_PER_SEC; 
+		SysTick_Config(cnts);
+	
+		return;
+}
+
 
 /*
 *********************************************************************************************************
@@ -58,4 +81,5 @@ INT32U  OS_CPU_SysTickClkFreq (void)
     freq = BSP_CPU_ClkFreq();
     return (freq);
 }
+
 

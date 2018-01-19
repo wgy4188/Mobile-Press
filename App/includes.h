@@ -24,8 +24,10 @@
 
 #include  "ucos_ii.h"
 #include  "cpu.h"
+#include  "os_cpu.h"
 #include  "app_cfg.h"
 #include  "stm32f10x.h"
 #include  "stm32f10x_rcc.h"
+#include  "stm32f10x_gpio.h"
 
 #endif
