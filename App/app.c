@@ -1,5 +1,5 @@
 
-#include "includes.h"
+#include "app_cfg.h"
 #include "bsp.h"
 
 __align(8) static OS_STK SignalTaskStk[SIGNAL_TASK_STACK_SIZE];
@@ -10,6 +10,7 @@ static void ModbusTask(void *p_arg);
 static void SignalTask(void *p_arg);
 static void MainTask(void *p_arg);
 
+OS_EVENT *RecF;/*recv data event*/
 /*
 *********************************************************************************************************
 *                                                main()
@@ -33,6 +34,8 @@ int  main (void)
 #if (OS_TASK_STAT_EN > 0)
 		OSStatInit();
 #endif
+	
+		RecF = OSSemCreate(0);/*event*/
 	
 		/*creat signal task*/
 		OSTaskCreateExt(SignalTask,	
@@ -84,10 +87,10 @@ static void ModbusTask(void *p_arg)
 			
 		for(;;)
 		{
-				OSSemPend(0,0, &err);
+				OSSemPend(RecF,0, &err);
 				if(err == OS_ERR_NONE)
 				{
-		
+						
 				}					
 				OSTimeDlyHMSM(0, 0, 0, 10);		 
 		}

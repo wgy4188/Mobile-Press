@@ -394,6 +394,11 @@
               <FileType>1</FileType>
               <FilePath>..\Fwlib\system_stm32f10x.c</FilePath>
             </File>
+            <File>
+              <FileName>modbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\modbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -409,6 +414,11 @@
               <FileType>1</FileType>
               <FilePath>..\Bsp\gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -423,6 +433,16 @@
               <FileName>stm32f10x_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Fwlib\stdlib\src\stm32f10x_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_usart.c</FilePath>
             </File>
           </Files>
         </Group>

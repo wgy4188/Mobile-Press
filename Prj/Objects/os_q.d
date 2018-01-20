@@ -11,7 +11,6 @@
 .\objects\os_q.o: ..\uCos_ii\uCCPU\cpu.h
 .\objects\os_q.o: ..\uCos_ii\uCCPU\cpu_def.h
 .\objects\os_q.o: ..\uCos_ii\uCPort\os_cpu.h
-.\objects\os_q.o: ..\App\app_cfg.h
 .\objects\os_q.o: ..\Fwlib\stm32f10x.h
 .\objects\os_q.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm3.h
 .\objects\os_q.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h

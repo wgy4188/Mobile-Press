@@ -31,7 +31,6 @@
 .\objects\stm32f10x_it.o: ..\Fwlib\stdlib\inc\stm32f10x_usart.h
 .\objects\stm32f10x_it.o: ..\Fwlib\stdlib\inc\stm32f10x_wwdg.h
 .\objects\stm32f10x_it.o: ..\Fwlib\stdlib\inc\misc.h
-.\objects\stm32f10x_it.o: ..\uCos_ii\uCSource\ucos_ii.h
 .\objects\stm32f10x_it.o: ..\App\app_cfg.h
 .\objects\stm32f10x_it.o: ..\App\includes.h
 .\objects\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
@@ -40,8 +39,10 @@
 .\objects\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\stm32f10x_it.o: ..\uCos_ii\uCSource\ucos_ii.h
-.\objects\stm32f10x_it.o: ..\uCos_ii\uCCPU\cpu.h
-.\objects\stm32f10x_it.o: ..\uCos_ii\uCCPU\cpu_def.h
-.\objects\stm32f10x_it.o: ..\uCos_ii\uCPort\os_cpu.h
 .\objects\stm32f10x_it.o: ..\App\app_cfg.h
 .\objects\stm32f10x_it.o: ..\uCos_ii\os_cfg.h
+.\objects\stm32f10x_it.o: ..\uCos_ii\uCPort\os_cpu.h
+.\objects\stm32f10x_it.o: ..\uCos_ii\uCCPU\cpu.h
+.\objects\stm32f10x_it.o: ..\uCos_ii\uCCPU\cpu_def.h
+.\objects\stm32f10x_it.o: ..\Bsp\uart.h
+.\objects\stm32f10x_it.o: ..\App\modbus.h

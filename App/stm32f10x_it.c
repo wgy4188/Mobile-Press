@@ -22,7 +22,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_it.h"
+#include "stm32f10x_it.h"	 
+#include "uart.h"
+#include "modbus.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -137,10 +139,11 @@ void SysTick_Handler(void)
 {
 		OS_CPU_SR  cpu_sr;
 
+		ReceiveOver();/*for instance, 20ms no data is error*/
     OS_ENTER_CRITICAL();                         /* Tell uC/OS-II that we are starting an ISR          */
     OSIntNesting++;
     OS_EXIT_CRITICAL();
-
+		
     OSTimeTick();                                /* Call uC/OS-II's OSTimeTick()                       */
 
     OSIntExit(); 
@@ -165,6 +168,28 @@ void SysTick_Handler(void)
 /**
   * @}
   */ 
+
+void USART1_IRQHandler(void)
+{
+		if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)/*Rec int*/
+		{ 
+				receTimeOut = 20;
+				checkoutError = 0;
+				receBuf[receCount] = USART_ReceiveData(USART1);
+				if(receCount<255)
+				{
+						receCount++;
+				}					
+				if(receCount>4)
+				{
+						OSSemPost(RecF);/*set event*/
+				}
+				
+				USART_ClearITPendingBit(USART1,USART_IT_RXNE);
+		}
+}
+
+
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

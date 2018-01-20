@@ -24,7 +24,7 @@ void SysTick_Init(void)
     uint32_t cnts;
 
     RCC_GetClocksFreq(&rcc_clocks);
-    cnts = (uint32_t)rcc_clocks.HCLK_Frequency/OS_TICKS_PER_SEC; 
+    cnts = (uint32_t)rcc_clocks.HCLK_Frequency/OS_TICKS_PER_SEC; //1000times persecond, 1ms to int
 		SysTick_Config(cnts);
 	
 		return;

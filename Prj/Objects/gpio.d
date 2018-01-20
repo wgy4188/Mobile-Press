@@ -1,18 +1,6 @@
 .\objects\gpio.o: ..\Bsp\gpio.c
 .\objects\gpio.o: ..\Bsp\gpio.h
-.\objects\gpio.o: ..\App\includes.h
-.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
-.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
-.\objects\gpio.o: ..\uCos_ii\uCSource\ucos_ii.h
-.\objects\gpio.o: ..\App\app_cfg.h
-.\objects\gpio.o: ..\App\includes.h
-.\objects\gpio.o: ..\uCos_ii\os_cfg.h
-.\objects\gpio.o: ..\uCos_ii\uCPort\os_cpu.h
-.\objects\gpio.o: ..\uCos_ii\uCCPU\cpu.h
-.\objects\gpio.o: ..\uCos_ii\uCCPU\cpu_def.h
+.\objects\gpio.o: ..\Fwlib\stdlib\inc\stm32f10x_gpio.h
 .\objects\gpio.o: ..\Fwlib\stm32f10x.h
 .\objects\gpio.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm3.h
 .\objects\gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -44,3 +32,4 @@
 .\objects\gpio.o: ..\Fwlib\stdlib\inc\stm32f10x_usart.h
 .\objects\gpio.o: ..\Fwlib\stdlib\inc\stm32f10x_wwdg.h
 .\objects\gpio.o: ..\Fwlib\stdlib\inc\misc.h
+.\objects\gpio.o: ..\Bsp\sys.h

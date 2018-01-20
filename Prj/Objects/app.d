@@ -1,4 +1,5 @@
 .\objects\app.o: ..\App\app.c
+.\objects\app.o: ..\App\app_cfg.h
 .\objects\app.o: ..\App\includes.h
 .\objects\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
@@ -7,7 +8,6 @@
 .\objects\app.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\app.o: ..\uCos_ii\uCSource\ucos_ii.h
 .\objects\app.o: ..\App\app_cfg.h
-.\objects\app.o: ..\App\includes.h
 .\objects\app.o: ..\uCos_ii\os_cfg.h
 .\objects\app.o: ..\uCos_ii\uCPort\os_cpu.h
 .\objects\app.o: ..\uCos_ii\uCCPU\cpu.h
@@ -44,4 +44,3 @@
 .\objects\app.o: ..\Fwlib\stdlib\inc\stm32f10x_wwdg.h
 .\objects\app.o: ..\Fwlib\stdlib\inc\misc.h
 .\objects\app.o: ..\Bsp\bsp.h
-.\objects\app.o: ..\Bsp\sys.h

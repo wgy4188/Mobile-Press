@@ -27,36 +27,6 @@ PushECOToAnnotationFile=1
 DItemRevisionGUID=
 
 [Document1]
-DocumentPath=ÊÖ»ú¹öÑ¹²âÊÔ¼Ð¾ß1.PcbLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-
-[Document2]
-DocumentPath=ÊÖ»ú¹öÑ¹²âÊÔ¼Ð¾ß.PcbDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-
-[Document3]
 DocumentPath=01_POWER.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -71,7 +41,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document4]
+[Document2]
 DocumentPath=02_MCU.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -86,7 +56,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document5]
+[Document3]
 DocumentPath=03_USART.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -101,7 +71,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document6]
+[Document4]
 DocumentPath=04_SCAN.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -116,7 +86,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document7]
+[Document5]
 DocumentPath=05_SD_USB.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -131,7 +101,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document8]
+[Document6]
 DocumentPath=06_SENSOR.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -146,7 +116,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document9]
+[Document7]
 DocumentPath=07_MOTOR.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -161,7 +131,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document10]
+[Document8]
 DocumentPath=08_DC_DC.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -176,7 +146,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document11]
+[Document9]
 DocumentPath=09_AD.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -191,7 +161,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document12]
+[Document10]
 DocumentPath=10_AD1.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -206,7 +176,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document13]
+[Document11]
 DocumentPath=11_INPUT.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -221,7 +191,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document14]
+[Document12]
 DocumentPath=12_OUT.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -236,7 +206,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document15]
+[Document13]
 DocumentPath=13_EEPROM_SW_JTAG.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -251,7 +221,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 
-[Document16]
+[Document14]
 DocumentPath=14_CONNECTOR.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -259,6 +229,21 @@ AnnotationIndexControlEnabled=0
 AnnotateSuffix=
 AnnotateScope=All
 AnnotateOrder=1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+
+[Document15]
+DocumentPath=Mobile.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
