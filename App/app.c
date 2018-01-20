@@ -26,7 +26,7 @@ int  main (void)
 {
 		INT8U  err;
 	
-    CPU_IntDis(); 
+    CPU_IntDis();
 		OSInit();   
 		BSP_Init();	
 	
@@ -58,7 +58,7 @@ int  main (void)
 										OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR);
 		 
 		OSTaskNameSet(MODBUS_TASK_PRIO, (INT8U*)"ModbusTask", &err);								
-		/*creat main   task*/
+		/*creat main task*/
 		OSTaskCreateExt(MainTask,	
 										(void *)0,
 										(OS_STK *)&MainTaskStk[MAIN_TASK_STACK_SIZE - 1],
@@ -95,24 +95,22 @@ static void ModbusTask(void *p_arg)
 
 static void SignalTask(void *p_arg)
 {	
-    (void)p_arg;
+	 (void)p_arg;
 
-	   OUT5 = 1;
-		 OUT6 = 1;
-	
-		 for(;;)
-		 {	  	  		 		  
-				OSTimeDlyHMSM(0, 0, 0, 10); 
-		 }
+	 for(;;)
+	 {	  	  		 		  
+			OSTimeDlyHMSM(0, 0, 1, 0); 
+	 }
 }
 
 
 static void MainTask(void *p_arg)
 {	
-    (void)p_arg;
+	 (void)p_arg;
 
-		 for(;;)
-		 {	  	  		 
-				OSTimeDlyHMSM(0, 0, 0, 10); 
-		 }
+	 for(;;)
+	 {	  	  		 
+			OSTimeDlyHMSM(0, 0, 0, 10); 
+	 }
 }
+

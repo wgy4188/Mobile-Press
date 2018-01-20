@@ -125,6 +125,7 @@ void DebugMon_Handler(void)
   */
 void PendSV_Handler(void)
 {
+
 }
 
 /**
@@ -134,9 +135,15 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-		OSIntEnter();
-		OSTimeTick();                            
-  	OSIntExit();
+		OS_CPU_SR  cpu_sr;
+
+    OS_ENTER_CRITICAL();                         /* Tell uC/OS-II that we are starting an ISR          */
+    OSIntNesting++;
+    OS_EXIT_CRITICAL();
+
+    OSTimeTick();                                /* Call uC/OS-II's OSTimeTick()                       */
+
+    OSIntExit(); 
 }
 
 /******************************************************************************/
