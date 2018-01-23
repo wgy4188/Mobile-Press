@@ -1,8 +1,12 @@
 
 #include "uart.h"
 
-uint8_t	receCount=0;
-uint8_t sendBuf[0xff]={0},receBuf[0xff]={0};
+volatile int8_t  FifoHead = 0;
+volatile int8_t  FifoTail = 0;
+volatile uint8_t FifoBuff[FIFO_SIZE] = {0};
+uint16_t receCount = 0;
+uint8_t receBuf[0xff] = {0};
+uint8_t sendBuf[0xff] = {0};
 
 void USART1_Configuration(void)
 {
@@ -33,7 +37,6 @@ void USART1_Configuration(void)
 		USART_Cmd(USART1, ENABLE);
 		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
-		// NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);  
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -42,6 +45,47 @@ void USART1_Configuration(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
+
+void USART3_Configuration(void)
+{
+		GPIO_InitTypeDef   GPIO_InitStructure;
+		USART_InitTypeDef  USART_InitStructure;
+		NVIC_InitTypeDef   NVIC_InitStructure;
+
+		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO, ENABLE);
+		RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+	
+		GPIO_PinRemapConfig(GPIO_FullRemap_USART3,ENABLE);
+
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;//PD8.TX3
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_Init(GPIOD, &GPIO_InitStructure);
+			
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//PD9.RX3
+		GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+		USART_Cmd(USART3, DISABLE);
+		USART_InitStructure.USART_BaudRate = 115200;
+		USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+		USART_InitStructure.USART_StopBits = USART_StopBits_1;
+		USART_InitStructure.USART_Parity = USART_Parity_No;
+		USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+		USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+		USART_Init(USART3, &USART_InitStructure);
+		
+		USART_Cmd(USART3, ENABLE);
+		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+		
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);  
+    NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+		
+}
 
 void USART4_Configuration(void)
 {
@@ -73,7 +117,6 @@ void USART4_Configuration(void)
 		USART_Cmd(UART4, ENABLE);
 		USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);
 		
-		//NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);  
     NVIC_InitStructure.NVIC_IRQChannel = UART4_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
@@ -82,7 +125,7 @@ void USART4_Configuration(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-
+/*USART1 Fun*/
 void USART1_SendData(uint16_t ch)
 {
 		USART_SendData(USART1, ch); 
@@ -99,6 +142,25 @@ void USART1_SendStringData(uint16_t *st)
 		}
 }
 
+/*USART3 Fun*/
+void USART3_SendData(uint8_t ch)
+{
+		USART_SendData(USART3, ch); 
+		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);
+		USART_ClearFlag(USART3,USART_FLAG_TC); 	
+}
+
+
+void USART3_SendStringData(uint16_t *st)
+{
+		while(*st!='\0')
+		{
+			USART3_SendData(*st);
+			st++;
+		}
+}
+
+/*USART4 Fun*/
 void USART4_SendData(uint8_t ch)
 {
 		USART_SendData(UART4, ch); 
@@ -116,18 +178,19 @@ void USART4_SendStringData(uint16_t *st)
 		}
 }
 
+/*Printf*/
 static void  SerWrStr (const char * tx_str)
 {
     while ((*tx_str) != 0)
 		{
 		if( (*tx_str) == '\n' )
 		{
-				USART4_SendData('\r');
-				USART4_SendData('\n');
+				USART3_SendData('\r');
+				USART3_SendData('\n');
 		}
 		else
 		{
-				USART4_SendData(*tx_str);
+				USART3_SendData(*tx_str);
 		}
 		
 				tx_str++;
@@ -147,6 +210,35 @@ void  SerPrintf(const  char *format, ...)
 }
 
 
+int32_t FifoWriteOneByte(uint8_t InputChar)
+{
+		if((FifoHead + 1)%FIFO_SIZE == FifoTail)
+		{
+				return -1;
+		}
+		
+		FifoBuff[FifoHead] = InputChar;
+		FifoHead = (FifoHead + 1)%FIFO_SIZE;
+		
+		return 0;
+}
+
+int32_t InquireUartRecvBuffer(uint8_t *pBuf, int8_t MaxBuffCount)
+{
+		int8_t i = 0;
+		int8_t RcvCount = 0;
+
+		while((FifoHead != FifoTail) && (MaxBuffCount > 0))
+		{
+				pBuf[i++] = FifoBuff[FifoTail];
+				FifoBuff[FifoTail] = 0;
+				FifoTail = (FifoTail + 1)%FIFO_SIZE;
+				MaxBuffCount--;
+				RcvCount++;
+		}
+		
+		return RcvCount;
+}
 
 
 

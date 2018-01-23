@@ -38,3 +38,6 @@
 .\objects\bsp.o: ..\uCos_ii\uCCPU\cpu_def.h
 .\objects\bsp.o: ..\Bsp\gpio.h
 .\objects\bsp.o: ..\Bsp\sys.h
+.\objects\bsp.o: ..\Bsp\uart.h
+.\objects\bsp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\bsp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h

@@ -399,6 +399,16 @@
               <FileType>1</FileType>
               <FilePath>..\App\modbus.c</FilePath>
             </File>
+            <File>
+              <FileName>dispose.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\dispose.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\delay.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -418,6 +428,31 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Bsp\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>iic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\iic.c</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\usb.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -443,6 +478,26 @@
               <FileName>stm32f10x_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Fwlib\stdlib\src\stm32f10x_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Fwlib\stdlib\src\stm32f10x_tim.c</FilePath>
             </File>
           </Files>
         </Group>

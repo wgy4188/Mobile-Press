@@ -1,13 +1,17 @@
 
 #include "bsp.h"
 #include "gpio.h"
+#include "uart.h"
 
 void  BSP_Init (void)
 {
 		RCC_Configuration();
 		SysTick_Init();
 		GpioCfg();
-		
+		USART1_Configuration();
+		USART3_Configuration();
+		//USART4_Configuration();
+	
 		return;
 }
 

@@ -139,7 +139,7 @@ void SysTick_Handler(void)
 {
 		OS_CPU_SR  cpu_sr;
 
-		ReceiveOver();/*for instance, 20ms no data is error*/
+		ReceiveOver();                               /*for instance, 20ms no data is error*/
     OS_ENTER_CRITICAL();                         /* Tell uC/OS-II that we are starting an ISR          */
     OSIntNesting++;
     OS_EXIT_CRITICAL();
@@ -168,28 +168,38 @@ void SysTick_Handler(void)
 /**
   * @}
   */ 
-
+uint8_t TempByte = 0;
 void USART1_IRQHandler(void)
 {
 		if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)/*Rec int*/
 		{ 
 				receTimeOut = 20;
 				checkoutError = 0;
-				receBuf[receCount] = USART_ReceiveData(USART1);
-				if(receCount<255)
-				{
-						receCount++;
-				}					
-				if(receCount>4)
-				{
-						OSSemPost(RecF);/*set event*/
-				}
-				
+				TempByte = USART_ReceiveData(USART1);
+				//USART3_SendData(TempByte);
+				FifoWriteOneByte(TempByte);			
+				receCount++;
 				USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 		}
 }
 
 
+void USART3_IRQHandler(void)
+{
+		if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)/*Rec int*/
+		{ 
+				USART_ClearITPendingBit(USART3,USART_IT_RXNE);
+		}
+}
+
+
+void UART4_IRQHandler(void)
+{
+		if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)/*Rec int*/
+		{ 			
+				USART_ClearITPendingBit(UART4,USART_IT_RXNE);
+		}
+}
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

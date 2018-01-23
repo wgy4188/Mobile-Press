@@ -1,6 +1,8 @@
 
 #include "app_cfg.h"
 #include "bsp.h"
+#include "uart.h"
+#include "dispose.h"
 
 __align(8) static OS_STK SignalTaskStk[SIGNAL_TASK_STACK_SIZE];
 __align(8) static OS_STK ModbusTaskStk[MODBUS_TASK_STACK_SIZE];	
@@ -11,6 +13,7 @@ static void SignalTask(void *p_arg);
 static void MainTask(void *p_arg);
 
 OS_EVENT *RecF;/*recv data event*/
+
 /*
 *********************************************************************************************************
 *                                                main()
@@ -36,6 +39,8 @@ int  main (void)
 #endif
 	
 		RecF = OSSemCreate(0);/*event*/
+	
+		SerPrintf("Start...\n");
 	
 		/*creat signal task*/
 		OSTaskCreateExt(SignalTask,	
@@ -101,11 +106,16 @@ static void SignalTask(void *p_arg)
 	 (void)p_arg;
 
 	 for(;;)
-	 {	  	  		 		  
-			OSTimeDlyHMSM(0, 0, 1, 0); 
+	 {	  	  		
+				//SerPrintf("into signal\n");
+				if(disposeFlag)
+				{
+						Dispose();
+				}
+				
+				OSTimeDlyHMSM(0, 0, 1, 0); 
 	 }
 }
-
 
 static void MainTask(void *p_arg)
 {	
@@ -113,7 +123,7 @@ static void MainTask(void *p_arg)
 
 	 for(;;)
 	 {	  	  		 
-			OSTimeDlyHMSM(0, 0, 0, 10); 
+				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }
 

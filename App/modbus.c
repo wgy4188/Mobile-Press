@@ -70,6 +70,8 @@ const uint8_t  auchCRCLo[] = {
 0x43, 0x83, 0x41, 0x81, 0x80, 0x40 
 } ;
 
+uint8_t disposeFlag=0;
+
 void ReceiveOver(void)
 {
 		if(receTimeOut>0)
@@ -79,6 +81,7 @@ void ReceiveOver(void)
 				{
 						receCount = 0;
 						checkoutError = 1;
+						disposeFlag = 1;
 				}
 		}
 		

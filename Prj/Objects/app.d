@@ -44,3 +44,5 @@
 .\objects\app.o: ..\Fwlib\stdlib\inc\stm32f10x_wwdg.h
 .\objects\app.o: ..\Fwlib\stdlib\inc\misc.h
 .\objects\app.o: ..\Bsp\bsp.h
+.\objects\app.o: ..\Bsp\uart.h
+.\objects\app.o: ..\App\dispose.h
