@@ -1,43 +1,104 @@
 
 #include "dispose.h"
 
-ComData g_ComData;
+static ComData g_ComData;
 static uint8_t cmd_flag=0;
+static uint8_t state=0;
 
 void CheckData(uint8_t byte)
 {
-		static uint8_t state=0;
-
 		switch(state)
 		{
 			case 0:
 			{
-				 if(byte==0xFB)
+				 if(byte==0x65)
 				 {
-					state=1;
+						state=1;
+				 }
+				 else if(byte == 0x71)
+				 {
+						state = 4;				  
 				 }
 				 else
 				 {
-					state=0;
+						state = 7;
 				 }
 			}
 			break;
 
 			case 1:
 			{
-				 g_ComData.data=byte;
+				 g_ComData.obj = ((uint16_t)byte<<8)&0xff00;//page
 				 state=2;
 			}
 			break;
 
 			case 2:
 			{
-				 g_ComData.cmd=byte;
-				 cmd_flag=1;
-				 state=0;
+				 g_ComData.obj |= (uint16_t)byte&0x00ff;//id
+				 state=3;
 			}
 			break;
-
+			
+			case 3:
+			{
+				g_ComData.event=byte;
+				state = 4;
+			}
+			break;
+			
+			case 4:
+			{
+				byte=0xff;
+				state = 5;
+			}
+			break;
+			
+			case 5:
+			{
+				byte=0xff;
+				state = 6;
+			}
+			break;
+			
+			case 6:
+			{
+				byte=0xff;
+				state = 0;
+				
+				cmd_flag = 1;
+			}
+			break;
+			
+			case 7:
+			{
+				g_ComData.data = (uint32_t)byte & 0x000000ff;
+				state = 8;
+			}
+			break;
+			
+			case 8:
+			{
+				g_ComData.data |= (((uint32_t)byte)<<8) & 0x0000ff00;
+				state = 9;
+			}
+			break;
+			
+			case 9:
+			{
+				g_ComData.data |= (((uint32_t)byte)<<16) & 0x00ff0000;
+				state =10;
+			}
+			break;
+			
+			case 10:
+			{
+				g_ComData.data |= (((uint32_t)byte)<<24) & 0xff000000;
+				g_ComData.obj = 0x0002;
+				state = 4;
+			}
+			break;
+			
 			default:
 				break;
 		}
@@ -62,46 +123,27 @@ void Dispose(void)
 				SerPrintf("%x ",tmp[i]);
 				CheckData(tmp[i]);		
 		}
+		state = 0;
 		SerPrintf("\n");
 		
 		if(cmd_flag == 1)
 		{	
-			switch(g_ComData.cmd)
+			switch(g_ComData.obj)
 			{
-				case 0xE7:
+				case b_RESET:
 				{
+					if(g_ComData.event==0x00)
+					{
+							SerPrintf("Reset\n");
+					}
 				}
 				break;
 				
-				case 0xE8:
+				case b_SAVE:
 				{
+						SerPrintf("Save data:%l\n",g_ComData.data);
 				}
 				break;
-				
-				case 0xEA:
-				{
-				}
-				break;
-				
-				case 0xEC:
-				{
-				}
-				break;						
-				
-				case 0xED:
-				{
-				}
-				break;						
-				
-				case 0xEE:
-				{
-				}
-				break;
-				
-				case 0xEF:
-				{
-				}
-				break;	
 				
 				default:
 					break;	

@@ -46,3 +46,4 @@
 .\objects\stm32f10x_it.o: ..\uCos_ii\uCCPU\cpu_def.h
 .\objects\stm32f10x_it.o: ..\Bsp\uart.h
 .\objects\stm32f10x_it.o: ..\App\modbus.h
+.\objects\stm32f10x_it.o: ..\Bsp\tim.h

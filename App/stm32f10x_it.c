@@ -25,6 +25,7 @@
 #include "stm32f10x_it.h"	 
 #include "uart.h"
 #include "modbus.h"
+#include "tim.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -176,7 +177,6 @@ void USART1_IRQHandler(void)
 				receTimeOut = 20;
 				checkoutError = 0;
 				TempByte = USART_ReceiveData(USART1);
-				//USART3_SendData(TempByte);
 				FifoWriteOneByte(TempByte);			
 				receCount++;
 				USART_ClearITPendingBit(USART1,USART_IT_RXNE);
@@ -186,7 +186,7 @@ void USART1_IRQHandler(void)
 
 void USART3_IRQHandler(void)
 {
-		if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)/*Rec int*/
+		if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 		{ 
 				USART_ClearITPendingBit(USART3,USART_IT_RXNE);
 		}
@@ -195,11 +195,33 @@ void USART3_IRQHandler(void)
 
 void UART4_IRQHandler(void)
 {
-		if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)/*Rec int*/
+		if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)
 		{ 			
 				USART_ClearITPendingBit(UART4,USART_IT_RXNE);
 		}
 }
+
+
+void TIM2_IRQHandler()
+{
+		if(TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET)
+		{	
+				TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+		}
+}
+
+
+void TIM4_IRQHandler()
+{
+		if(TIM_GetITStatus(TIM4 , TIM_IT_Update) != RESET)
+		{	
+				TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+		}
+}
+
+
+
+
 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

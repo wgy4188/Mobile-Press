@@ -46,3 +46,7 @@
 .\objects\app.o: ..\Bsp\bsp.h
 .\objects\app.o: ..\Bsp\uart.h
 .\objects\app.o: ..\App\dispose.h
+.\objects\app.o: ..\App\action.h
+.\objects\app.o: ..\Bsp\gpio.h
+.\objects\app.o: ..\Bsp\sys.h
+.\objects\app.o: ..\Bsp\tim.h

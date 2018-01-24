@@ -3,6 +3,7 @@
 #include "bsp.h"
 #include "uart.h"
 #include "dispose.h"
+#include "action.h"
 
 __align(8) static OS_STK SignalTaskStk[SIGNAL_TASK_STACK_SIZE];
 __align(8) static OS_STK ModbusTaskStk[MODBUS_TASK_STACK_SIZE];	
@@ -107,13 +108,12 @@ static void SignalTask(void *p_arg)
 
 	 for(;;)
 	 {	  	  		
-				//SerPrintf("into signal\n");
 				if(disposeFlag)
 				{
 						Dispose();
-				}
-				
-				OSTimeDlyHMSM(0, 0, 1, 0); 
+				}	
+				KeyScan();
+				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }
 
@@ -123,6 +123,9 @@ static void MainTask(void *p_arg)
 
 	 for(;;)
 	 {	  	  		 
+				NormalWork();
+				EmergencyDispose();
+				ResetDispose();
 				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }

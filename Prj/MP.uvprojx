@@ -409,6 +409,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\delay.c</FilePath>
             </File>
+            <File>
+              <FileName>action.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\action.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -425,6 +430,16 @@
               <FilePath>..\Bsp\gpio.c</FilePath>
             </File>
             <File>
+              <FileName>tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\pwm.c</FilePath>
+            </File>
+            <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Bsp\uart.c</FilePath>
@@ -438,11 +453,6 @@
               <FileName>iic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Bsp\iic.c</FilePath>
-            </File>
-            <File>
-              <FileName>pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Bsp\pwm.c</FilePath>
             </File>
             <File>
               <FileName>spi.c</FileName>

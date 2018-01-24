@@ -296,11 +296,11 @@ ARM Macro Assembler    Page 5
   196 0000002A         
   197 0000002A                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
-ork --depend=.\objects\cpu_a.d -o.\objects\cpu_a.o -I"E:\魏高玉\HW1TE01456 TP17
-03气密自动化测试夹具\MCU\Prj\RTE\_Flash" -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\
-CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include --p
-redefine="__UVISION_VERSION SETA 522" --predefine="_RTE_ SETA 1" --predefine="S
-TM32F10X_HD SETA 1" --list=.\listings\cpu_a.lst ..\uCos_ii\uCCPU\cpu_a.asm
+ork --depend=.\objects\cpu_a.d -o.\objects\cpu_a.o -IE:\Mobile-Press\Prj\RTE\_F
+lash -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\
+Keil\STM32F1xx_DFP\1.0.5\Device\Include --predefine="__UVISION_VERSION SETA 522
+" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD SETA 1" --list=.\listing
+s\cpu_a.lst ..\uCos_ii\uCCPU\cpu_a.asm
 
 
 
