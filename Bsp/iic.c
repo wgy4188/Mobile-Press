@@ -1,20 +1,21 @@
-#include "iic.h"
 
-void IIC_Config(void)
+#include <iic.h>
+
+void IIC_Configuration(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;  //定义变量
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE); //时钟使能
+	
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;   //SCL			
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   //推挽输出
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);		 //PB  
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;   //SCL			
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   //推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;   //SDA			
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);		
+	  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_SDA;   //SDA			
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;	   //上拉输入
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);		 //PB 						  
 }
 
 void SDA_IN(void)  
@@ -22,23 +23,22 @@ void SDA_IN(void)
 	GPIO_InitTypeDef GPIO_InitStructure;  //定义变量
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_SDA;   //SDA			
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;	//上拉输入
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;	   //上拉输入
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);		 //PB 
 }
 
-static void SDA_OUT(void) 
+void SDA_OUT(void) 
 {	
 	GPIO_InitTypeDef GPIO_InitStructure;  //定义变量
 	
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_SDA;   //SDA			
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	
 	GPIO_Init(GPIOB, &GPIO_InitStructure);		 //PB 
 }
 
-static void IIC_Start(void)
+void IIC_Start(void)
 {
 	 SDA_OUT();     //sda线输出
 	 Set_IIC_SDA;      
@@ -49,8 +49,7 @@ static void IIC_Start(void)
 	 Clr_IIC_SCL; //钳住I2C总线，准备发送或接收数据 
 } 
 
-
-static void IIC_Stop(void)
+void IIC_Stop(void)
 {
 	 SDA_OUT();//sda线输出
 
@@ -62,10 +61,9 @@ static void IIC_Stop(void)
 	 Set_IIC_SCL; 	          
 }
 
-
-static uint8_t IIC_Receive_Ack(void)
+ unsigned char IIC_Recelve_Ack(void)
 {
-	 uint8_t ucErrTime=0;
+	 unsigned int ucErrTime=0;
 	
 	 SDA_IN();      //SDA设置为输入  
 	 Set_IIC_SDA;
@@ -75,8 +73,8 @@ static uint8_t IIC_Receive_Ack(void)
 	 delay_Nus(5);  
 	 while(READ_SDA)  //6T=1us
 	 {
-			ucErrTime++;
-	  	if(ucErrTime>=250)   //600/6=100uS
+	 	ucErrTime++;
+	  	if(ucErrTime>=72000)   //600/6=100uS
 	  	{
 	   		Clr_IIC_SCL;//时钟输出0
 	   		return 1;
@@ -86,7 +84,7 @@ static uint8_t IIC_Receive_Ack(void)
 	 return 0;  
 } 
 
-static void IIC_Ack(void)
+void IIC_Ack(void)
 {
 	 Clr_IIC_SCL;
 	 SDA_OUT();
@@ -97,7 +95,7 @@ static void IIC_Ack(void)
 	 Clr_IIC_SCL;
 }
 
-static void IIC_Nack(void)
+void IIC_Nack(void)
 {
 	 Clr_IIC_SCL;
 	 SDA_OUT();
@@ -145,7 +143,7 @@ unsigned char IIC_Read_Byte(unsigned char ack)
 	  {receive|=0x01;}   
 	  delay_Nus(5); 
 	}  
-  if (!ack)
+    if (!ack)
 	{IIC_Nack();}//发送NaCK    	
     else
     {IIC_Ack();} //发送ACK       
@@ -155,21 +153,22 @@ unsigned char IIC_Read_Byte(unsigned char ack)
 
 void IIC_Write_Data(unsigned int RomAddress,unsigned char data)
 {
-	unsigned char flag=0;	
+	unsigned char flag=0;
 	
 	do
 	{
-		IIC_Start();		
-		if(EE_TYPE==AT24C02)
+		IIC_Start();
+		IIC_WRITE_BYTE(WriteDeviceIIC);	 //写操作   
+		if(IIC_Recelve_Ack()==0)  		//判断ACK
 		{
-			IIC_WRITE_BYTE(0XA0+((RomAddress/256)<<1));
-		  if(IIC_Receive_Ack()==0)  //判断ACK
-	  	{
+	      IIC_WRITE_BYTE((unsigned char)(RomAddress>>8));	  //写H地址
+		  if(IIC_Recelve_Ack()==0)  //判断ACK
+	  	  {
 			IIC_WRITE_BYTE((unsigned char)RomAddress);	  //写L地址
-			if(IIC_Receive_Ack()==0)  //判断ACK
+			if(IIC_Recelve_Ack()==0)  //判断ACK
 			{
 				IIC_WRITE_BYTE(data);
-			    if(IIC_Receive_Ack()==0)  //判断ACK
+			    if(IIC_Recelve_Ack()==0)  //判断ACK
 			    {flag=0;}
 			    else
 			    {flag=1;}
@@ -178,41 +177,19 @@ void IIC_Write_Data(unsigned int RomAddress,unsigned char data)
 			{flag=1;}			
 		  }	
 		  else
-		  {flag=1;}	
-    }
-    else
-		{
-		 IIC_WRITE_BYTE(WriteDeviceIIC);	 //写操作   
-		 if(IIC_Receive_Ack()==0)  		//判断ACK
-		  {
-	     IIC_WRITE_BYTE((unsigned char)(RomAddress>>8));	  //写H地址
-		   if(IIC_Receive_Ack()==0)  //判断ACK
-	  	  {
-			    IIC_WRITE_BYTE((unsigned char)RomAddress);	  //写L地址
-			    if(IIC_Receive_Ack()==0)  //判断ACK
-			      {
-				     IIC_WRITE_BYTE(data);
-			       if(IIC_Receive_Ack()==0)  //判断ACK
-			        {flag=0;}
-			       else
-			       {flag=1;}
-			      }
-			    else
-			     {flag=1;}			
-		    }	
-		   else
-		   {flag=1;}
-		  }
-		  else
 		  {flag=1;}
-		}			
+		}
+		else
+		{flag=1;}
 	}while(flag==1);
-	
 	IIC_Stop();      //停止
+//	delay_Nms(1);
+//	OSTimeDlyHMSM(0, 0, 0, 10);	
 	delay_Nus(250);
 	delay_Nus(250);
 	delay_Nus(250);
 	delay_Nus(250);
+
 }
 
 unsigned char IIC_Read_Data(unsigned int RomAddress)
@@ -221,18 +198,19 @@ unsigned char IIC_Read_Data(unsigned int RomAddress)
 
 	do
 	{
-		IIC_Start();		
-		if(EE_TYPE==AT24C02)
-		{		
-		  IIC_WRITE_BYTE(0XA0+((RomAddress/256)<<1));	 //写操作 		
-		  if(IIC_Receive_Ack()==0)  //判断ACK
-			 {
+		IIC_Start();
+		IIC_WRITE_BYTE(WriteDeviceIIC);	 //写操作 
+		if(IIC_Recelve_Ack()==0)  		//判断ACK
+		{
+			IIC_WRITE_BYTE((unsigned char)(RomAddress>>8));		//写H地址
+			if(IIC_Recelve_Ack()==0)  //判断ACK
+			{
 				IIC_WRITE_BYTE((unsigned char)RomAddress);		//写L地址
-				if(IIC_Receive_Ack()==0)  //判断ACK
+				if(IIC_Recelve_Ack()==0)  //判断ACK
 				{
 					IIC_Start();
 					IIC_WRITE_BYTE(ReadDeviceIIC);   //读操作
-					if(IIC_Receive_Ack()==0)  //判断ACK
+					if(IIC_Recelve_Ack()==0)  //判断ACK
 					{
 						data=IIC_Read_Byte(0);
 						flag=0;				
@@ -242,65 +220,90 @@ unsigned char IIC_Read_Data(unsigned int RomAddress)
 				}
 				else
 				{flag=1;} 	
-			 }
+			}
 			else
 			{flag=1;}
-		}	
-    else
-		{
-		 	IIC_WRITE_BYTE(WriteDeviceIIC);	 //写操作 
-	  	if(IIC_Receive_Ack()==0)  		//判断ACK
-		   {
-			  IIC_WRITE_BYTE((unsigned char)(RomAddress>>8));		//写H地址
-			  if(IIC_Receive_Ack()==0)  //判断ACK
-			   {
-				  IIC_WRITE_BYTE((unsigned char)RomAddress);		//写L地址
-				  if(IIC_Receive_Ack()==0)  //判断ACK
-				   {
-					  IIC_Start();
-					  IIC_WRITE_BYTE(ReadDeviceIIC);   //读操作
-					  if(IIC_Receive_Ack()==0)  //判断ACK
-					    {
-						   data=IIC_Read_Byte(0);
-						   flag=0;				
-					    }
-					  else
-					   {flag=1;}  
-				   }
-				 else
-				  {flag=1;} 	
-			  }
-			  else
-			  {flag=1;}
-		   }
-		  else
-	     {flag=1;}	
-		 }			
+		}
+		else
+	    {flag=1;}	
 	}while(flag==1);
 	IIC_Stop();   //停止
 	return data;
 }
 
-void IIC_Write_Nbyte(unsigned char *pc,unsigned int Addr,unsigned char number) 
-{
-	unsigned char i;		
-    
-	for(i=0;i<=number;i++)
-	{
-		IIC_Write_Data(Addr,pc[i]);
-		Addr++;
-	}
-}
-
-void IIC_Read_Nbyte(unsigned char *pc,unsigned int Addr,unsigned char number) 
+void IIC_Write_2Byte(unsigned int RomAddress, int udata)
 {
 	unsigned char i;
-	
-	for(i=0;i<number;i++)
+		
+	for(i=0;i<=8;i+=8)
 	{
-		pc[i]=IIC_Read_Data(Addr);
-		Addr++;
-	}		
+	  IIC_Write_Data(RomAddress,((unsigned char)(udata>>i))); 
+	  RomAddress++; 
+	}	  
 }
 
 
+int IIC_Read_2Byte(unsigned int RomAddress)
+{
+	unsigned char BufData,i;
+	unsigned int data=0;
+		
+	for(i=0;i<=8;i+=8)
+	{
+	  BufData=IIC_Read_Data(RomAddress); 
+	  RomAddress++; 
+	  data|=((int)BufData)<<i;
+	}
+	
+	return data;
+}
+
+void IIC_Write_4Byte(unsigned int RomAddress,unsigned long udata)
+{
+	unsigned char i;
+		
+	for(i=0;i<=24;i+=8)
+	{
+	  IIC_Write_Data(RomAddress,((unsigned char)(udata>>i))); 
+	  RomAddress++; 
+	}  
+}
+
+unsigned long IIC_Read_4Byte(unsigned int RomAddress)
+{
+	unsigned char BufData,i;
+	unsigned long data=0;
+		
+	for(i=0;i<=24;i+=8)
+	{
+	  BufData=IIC_Read_Data(RomAddress); 
+	  RomAddress++; 
+	  data|=((unsigned long)BufData)<<i;
+	}
+	return data;
+}
+
+void IIC_Write_double(unsigned int RomAddress,double udata)
+{
+	unsigned char i;
+	void *p;
+
+	p=&udata;	
+	for(i=0;i<sizeof(double);i++)
+	{IIC_Write_Data(RomAddress+i,*((char *)p+i));}
+  
+}
+
+double IIC_Read_double(unsigned int RomAddress)
+{
+	
+
+	unsigned char i;
+	double data=0.0;
+	void *p;
+
+	p=&data;
+	for(i=0;i<sizeof(double);i++)
+	{*((char *)p+i)=IIC_Read_Data(RomAddress+i);}	
+	return data;
+}

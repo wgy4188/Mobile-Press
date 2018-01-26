@@ -19,15 +19,21 @@
 
 #define 	READ_SDA     							GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_SDA)
 
-#define EE_TYPE 0
-#define AT24C02 1
+#define   EE_TYPE    0
+#define   AT24C02    1
 
-void IIC_Config(void);
+void IIC_Configuration(void);
 void IIC_WRITE_BYTE(unsigned char txd);
 unsigned char IIC_Read_Byte(unsigned char ack);
+void IIC_Write_2Byte(unsigned int RomAddress, int udata);
+int IIC_Read_2Byte(unsigned int RomAddress);
+void IIC_Write_4Byte(unsigned int RomAddress,unsigned long udata);
+unsigned long IIC_Read_4Byte(unsigned int RomAddress);
+void IIC_Write_double(unsigned int RomAddress,double udata);
+double IIC_Read_double(unsigned int RomAddress);
+
 void IIC_Write_Data(unsigned int RomAddress,unsigned char data);
 unsigned char IIC_Read_Data(unsigned int RomAddress);
-
 void IIC_Write_Nbyte(unsigned char *pc,unsigned int Addr,unsigned char number);
 void IIC_Read_Nbyte(unsigned char *pc,unsigned int Addr,unsigned char number); 
 

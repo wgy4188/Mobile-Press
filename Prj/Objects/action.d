@@ -1,10 +1,10 @@
 .\objects\action.o: ..\App\action.c
 .\objects\action.o: ..\App\action.h
+.\objects\action.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\action.o: ..\Bsp\gpio.h
 .\objects\action.o: ..\Fwlib\stdlib\inc\stm32f10x_gpio.h
 .\objects\action.o: ..\Fwlib\stm32f10x.h
 .\objects\action.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm3.h
-.\objects\action.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\action.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h
 .\objects\action.o: C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h
 .\objects\action.o: ..\Fwlib\system_stm32f10x.h
@@ -35,3 +35,10 @@
 .\objects\action.o: ..\Fwlib\stdlib\inc\misc.h
 .\objects\action.o: ..\Bsp\sys.h
 .\objects\action.o: ..\Bsp\tim.h
+.\objects\action.o: ..\App\dispose.h
+.\objects\action.o: ..\Bsp\uart.h
+.\objects\action.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\action.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\action.o: ..\Bsp\iic.h
+.\objects\action.o: ..\App\delay.h
+.\objects\action.o: ..\App\action.h

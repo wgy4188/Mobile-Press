@@ -22,6 +22,7 @@ void USART4_Configuration(void);
 
 void USART1_SendData(uint16_t ch);
 void USART1_SendStringData(uint16_t *st);
+void USART1_Printf(const  char *format, ...);
 
 void USART3_SendData(uint8_t ch);
 void USART3_SendStringData(uint16_t *st);

@@ -41,3 +41,6 @@
 .\objects\bsp.o: ..\Bsp\uart.h
 .\objects\bsp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\bsp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\bsp.o: ..\Bsp\tim.h
+.\objects\bsp.o: ..\Bsp\iic.h
+.\objects\bsp.o: ..\App\delay.h

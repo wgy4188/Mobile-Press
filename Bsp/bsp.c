@@ -2,15 +2,19 @@
 #include "bsp.h"
 #include "gpio.h"
 #include "uart.h"
+#include "tim.h"
+#include "iic.h"
 
 void  BSP_Init (void)
 {
 		RCC_Configuration();
 		SysTick_Init();
 		GpioCfg();
+		TIM_Config();
 		USART1_Configuration();
 		USART3_Configuration();
 		//USART4_Configuration();
+		IIC_Configuration();
 	
 		return;
 }
@@ -54,8 +58,7 @@ void SysTick_Init(void)
 CPU_INT32U  BSP_CPU_ClkFreq (void)
 {
     RCC_ClocksTypeDef  rcc_clocks;
-
-
+	
     RCC_GetClocksFreq(&rcc_clocks);
 
     return ((CPU_INT32U)rcc_clocks.HCLK_Frequency);
@@ -80,7 +83,6 @@ CPU_INT32U  BSP_CPU_ClkFreq (void)
 INT32U  OS_CPU_SysTickClkFreq (void)
 {
     INT32U  freq;
-
 
     freq = BSP_CPU_ClkFreq();
     return (freq);

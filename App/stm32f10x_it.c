@@ -26,6 +26,8 @@
 #include "uart.h"
 #include "modbus.h"
 #include "tim.h"
+#include "action.h"
+#include "dispose.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -61,6 +63,7 @@ void HardFault_Handler(void)
   /* Go to infinite loop when Hard Fault exception occurs */
   while (1)
   {
+		
   }
 }
 
@@ -206,7 +209,10 @@ void TIM2_IRQHandler()
 {
 		if(TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET)
 		{	
-				TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+				if(setTime>0)setTime--;
+				USART1_Printf("n_time.val=%d",setTime);
+				ComStop();
+				TIM_ClearFlag(TIM2,TIM_IT_Update);
 		}
 }
 

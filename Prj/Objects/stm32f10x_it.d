@@ -47,3 +47,10 @@
 .\objects\stm32f10x_it.o: ..\Bsp\uart.h
 .\objects\stm32f10x_it.o: ..\App\modbus.h
 .\objects\stm32f10x_it.o: ..\Bsp\tim.h
+.\objects\stm32f10x_it.o: ..\App\action.h
+.\objects\stm32f10x_it.o: ..\Bsp\gpio.h
+.\objects\stm32f10x_it.o: ..\Bsp\sys.h
+.\objects\stm32f10x_it.o: ..\App\dispose.h
+.\objects\stm32f10x_it.o: ..\Bsp\iic.h
+.\objects\stm32f10x_it.o: ..\App\delay.h
+.\objects\stm32f10x_it.o: ..\App\action.h

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include "uart.h"
+#include "iic.h"
+#include "action.h"
 
 extern uint8_t disposeFlag;
 
@@ -20,8 +22,11 @@ typedef struct
 }ComData;
 
 
-
+extern uint32_t RecvTime;
+extern uint8_t ResetFlag;
+extern uint8_t SaveData[4];
 void Dispose(void);
+void ComStop(void);
 
 #endif	
 

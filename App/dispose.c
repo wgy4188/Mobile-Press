@@ -2,8 +2,9 @@
 #include "dispose.h"
 
 static ComData g_ComData;
-static uint8_t cmd_flag=0;
-static uint8_t state=0;
+static uint8_t cmd_flag=0;//执行通信命令标志
+static uint8_t state=0;//数据校验状态
+uint32_t RecvTime=0;//更新时间
 
 void CheckData(uint8_t byte)
 {
@@ -17,11 +18,11 @@ void CheckData(uint8_t byte)
 				 }
 				 else if(byte == 0x71)
 				 {
-						state = 4;				  
+						state = 7;				  
 				 }
 				 else
 				 {
-						state = 7;
+						state = 0;
 				 }
 			}
 			break;
@@ -74,6 +75,7 @@ void CheckData(uint8_t byte)
 			{
 				g_ComData.data = (uint32_t)byte & 0x000000ff;
 				state = 8;
+	
 			}
 			break;
 			
@@ -81,6 +83,7 @@ void CheckData(uint8_t byte)
 			{
 				g_ComData.data |= (((uint32_t)byte)<<8) & 0x0000ff00;
 				state = 9;
+	
 			}
 			break;
 			
@@ -88,6 +91,7 @@ void CheckData(uint8_t byte)
 			{
 				g_ComData.data |= (((uint32_t)byte)<<16) & 0x00ff0000;
 				state =10;
+			
 			}
 			break;
 			
@@ -96,6 +100,7 @@ void CheckData(uint8_t byte)
 				g_ComData.data |= (((uint32_t)byte)<<24) & 0xff000000;
 				g_ComData.obj = 0x0002;
 				state = 4;
+	
 			}
 			break;
 			
@@ -104,6 +109,13 @@ void CheckData(uint8_t byte)
 		}
 
 		return;
+}
+
+void ComStop()
+{
+		USART1_SendData(0xff);
+		USART1_SendData(0xff);
+		USART1_SendData(0xff);
 }
 
 void Dispose(void)
@@ -120,11 +132,9 @@ void Dispose(void)
 
 		for(i=0;i<count;i++)
 		{	
-				SerPrintf("%x ",tmp[i]);
 				CheckData(tmp[i]);		
 		}
 		state = 0;
-		SerPrintf("\n");
 		
 		if(cmd_flag == 1)
 		{	
@@ -132,16 +142,19 @@ void Dispose(void)
 			{
 				case b_RESET:
 				{
-					if(g_ComData.event==0x00)
-					{
-							SerPrintf("Reset\n");
-					}
+						if(g_ComData.event==0x00)//弹起事件
+						{
+								SerPrintf("Reset\n");		
+								ResetFlag = 1;
+						}
 				}
 				break;
 				
 				case b_SAVE:
-				{
-						SerPrintf("Save data:%l\n",g_ComData.data);
+				{						
+						RecvTime = g_ComData.data;
+						IIC_Write_4Byte(0x0001, RecvTime);
+						SerPrintf("Save data:%ld\n",RecvTime);
 				}
 				break;
 				

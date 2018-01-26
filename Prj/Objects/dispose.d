@@ -35,3 +35,10 @@
 .\objects\dispose.o: ..\Fwlib\stdlib\inc\stm32f10x_usart.h
 .\objects\dispose.o: ..\Fwlib\stdlib\inc\stm32f10x_wwdg.h
 .\objects\dispose.o: ..\Fwlib\stdlib\inc\misc.h
+.\objects\dispose.o: ..\Bsp\iic.h
+.\objects\dispose.o: ..\App\delay.h
+.\objects\dispose.o: ..\App\action.h
+.\objects\dispose.o: ..\Bsp\gpio.h
+.\objects\dispose.o: ..\Bsp\sys.h
+.\objects\dispose.o: ..\Bsp\tim.h
+.\objects\dispose.o: ..\App\dispose.h

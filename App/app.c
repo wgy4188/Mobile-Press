@@ -40,8 +40,7 @@ int  main (void)
 #endif
 	
 		RecF = OSSemCreate(0);/*event*/
-	
-		SerPrintf("Start...\n");
+		ActionInit();
 	
 		/*creat signal task*/
 		OSTaskCreateExt(SignalTask,	
@@ -110,6 +109,7 @@ static void SignalTask(void *p_arg)
 	 {	  	  		
 				if(disposeFlag)
 				{
+						disposeFlag = 0;
 						Dispose();
 				}	
 				KeyScan();
@@ -126,6 +126,7 @@ static void MainTask(void *p_arg)
 				NormalWork();
 				EmergencyDispose();
 				ResetDispose();
+				GridDispose();
 				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }

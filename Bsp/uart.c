@@ -32,8 +32,9 @@ void USART1_Configuration(void)
 		USART_InitStructure.USART_Parity = USART_Parity_No;
 		USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 		USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-
 		USART_Init(USART1, &USART_InitStructure);
+		
+		USART_ClearFlag(USART1,USART_FLAG_TC);
 		USART_Cmd(USART1, ENABLE);
 		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
@@ -75,6 +76,7 @@ void USART3_Configuration(void)
 		USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 		USART_Init(USART3, &USART_InitStructure);
 		
+		USART_ClearFlag(USART3,USART_FLAG_TC);
 		USART_Cmd(USART3, ENABLE);
 		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 		
@@ -140,6 +142,39 @@ void USART1_SendStringData(uint16_t *st)
 			USART1_SendData(*st);
 			st++;
 		}
+}
+
+
+static void  USART1_SerWrStr (const char * tx_str)
+{
+    while ((*tx_str) != 0)
+		{
+				if( (*tx_str) == '\n' )
+				{
+						USART1_SendData('\r');
+						USART1_SendData('\n');
+				}
+				else
+				{
+						USART1_SendData(*tx_str);
+				}
+
+				tx_str++;
+    }
+}
+
+void USART1_Printf(const  char *format, ...)
+{
+		static	char buf[255];
+		va_list	vArgs;
+
+		va_start(vArgs, format);
+		vsprintf((char *)buf, (char const *)format, vArgs);
+		va_end(vArgs);
+	
+		USART1_SerWrStr((char *)buf);
+
+		return;
 }
 
 /*USART3 Fun*/
