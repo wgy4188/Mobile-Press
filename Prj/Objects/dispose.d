@@ -42,3 +42,4 @@
 .\objects\dispose.o: ..\Bsp\sys.h
 .\objects\dispose.o: ..\Bsp\tim.h
 .\objects\dispose.o: ..\App\dispose.h
+.\objects\dispose.o: ..\Bsp\pwm.h

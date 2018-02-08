@@ -44,3 +44,4 @@
 .\objects\bsp.o: ..\Bsp\tim.h
 .\objects\bsp.o: ..\Bsp\iic.h
 .\objects\bsp.o: ..\App\delay.h
+.\objects\bsp.o: ..\Bsp\pwm.h

@@ -10,21 +10,22 @@ extern uint8_t disposeFlag;
 
 enum ControlSort
 {
-		b_RESET = 0x0001,
-		b_SAVE = 0x0002
+		b_Freq = 0x0001,
+		b_Duty = 0x0002
 };
 
 typedef struct
 {
 		uint16_t obj;
 		uint8_t  event;
-		uint32_t data;//4byte data
+		uint32_t data;
 }ComData;
 
 
 extern uint32_t RecvTime;
 extern uint8_t ResetFlag;
 extern uint8_t SaveData[4];
+
 void Dispose(void);
 void ComStop(void);
 

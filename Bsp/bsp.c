@@ -4,17 +4,19 @@
 #include "uart.h"
 #include "tim.h"
 #include "iic.h"
+#include "pwm.h"
 
 void  BSP_Init (void)
 {
 		RCC_Configuration();
 		SysTick_Init();
 		GpioCfg();
-		TIM_Config();
+		//TIM_Config();
 		USART1_Configuration();
 		USART3_Configuration();
-		//USART4_Configuration();
+		USART4_Configuration();
 		IIC_Configuration();
+		PWM_Config(71,49,24);
 	
 		return;
 }

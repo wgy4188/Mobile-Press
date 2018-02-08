@@ -77,11 +77,11 @@ void ReceiveOver(void)
 		if(receTimeOut>0)
 		{
 				receTimeOut--;
-				if(receTimeOut==0 && receCount>0)
+				if(receTimeOut==0 && receCount>0)//receive a frame, interval 20ms
 				{
 						receCount = 0;
-						checkoutError = 1;
-						disposeFlag = 1;
+						checkoutError = 0;
+						disposeFlag = 1; //dispose flag
 				}
 		}
 		
@@ -104,7 +104,6 @@ uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
 		return (uchCRCHi << 8 | uchCRCLo) ; 
 }
 
-
 void beginSend(uint16_t sendCount)
 {
 		uint16_t i;
@@ -120,7 +119,7 @@ void beginSend(uint16_t sendCount)
 }
 
 
-int16_t getCoilVal(uint16_t addr, int16_t *tempData)
+int16_t getCoilVal(uint16_t addr, int16_t *tempData)//get a value from cpu;
 {
 		int16_t result = 0;
 		uint16_t tempAddr;
@@ -172,7 +171,7 @@ void readCoil(void)/*read mean from MCU to HMI*/
 }
 
 
-int16_t getRegisterVal(uint16_t addr,int16_t *tempData)
+int16_t getRegisterVal(uint16_t addr,int16_t *tempData)//get a value from cpu;
 {
 		uint16_t tempAddr;
 		int16_t  *p,result = 0;
@@ -184,7 +183,7 @@ int16_t getRegisterVal(uint16_t addr,int16_t *tempData)
 		return result;
 }
 
-void readRegisters(void)
+void readRegisters(void)/*read mean from MCU to HMI*/
 {
 		uint16_t readCount,byteCount;
 		uint16_t addr,tempAddr,crcData;
@@ -213,7 +212,8 @@ void readRegisters(void)
 		beginSend(byteCount);
 }
 
-int16_t setCoilVal(uint16_t addr,int16_t tempData)
+
+int16_t setCoilVal(uint16_t addr,int16_t tempData)/*set a value to cpu*/ 
 {
 		int16_t  result = 0;
 		uint16_t tempAddr;
@@ -493,7 +493,7 @@ void checkComm0Modbus(void)
 										if(receBuf[0]==localAddr && checkoutError==0)
 										{
 												crcData = crc16(receBuf,tempData-2);
-												if(crcData == ((uint16_t)receBuf[tempData-2]<<8) | (uint16_t)receBuf[tempData-1])
+												if( crcData == (((uint16_t)receBuf[tempData-2]<<8) | (uint16_t)receBuf[tempData-1]) )
 												{
 														presetMultipleRegisters();			
 												}

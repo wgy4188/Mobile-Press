@@ -130,22 +130,11 @@ void USART4_Configuration(void)
 /*USART1 Fun*/
 void USART1_SendData(uint16_t ch)
 {
-		USART_SendData(USART1, ch); 
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-		USART_ClearFlag(USART1,USART_FLAG_TC); 	
+		USART_SendData(USART1, ch); 	
 }
 
-void USART1_SendStringData(uint16_t *st)
-{
-		while(*st!='\0')
-		{
-			USART1_SendData(*st);
-			st++;
-		}
-}
-
-
-static void  USART1_SerWrStr (const char * tx_str)
+void  USART1_SerWrStr (const char * tx_str)
 {
     while ((*tx_str) != 0)
 		{
@@ -180,59 +169,34 @@ void USART1_Printf(const  char *format, ...)
 /*USART3 Fun*/
 void USART3_SendData(uint8_t ch)
 {
+		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET){}
 		USART_SendData(USART3, ch); 
-		while (USART_GetFlagStatus(USART3, USART_FLAG_TC) == RESET);
-		USART_ClearFlag(USART3,USART_FLAG_TC); 	
+	
+		return;
 }
 
 
-void USART3_SendStringData(uint16_t *st)
-{
-		while(*st!='\0')
-		{
-			USART3_SendData(*st);
-			st++;
-		}
-}
-
-/*USART4 Fun*/
-void USART4_SendData(uint8_t ch)
-{
-		USART_SendData(UART4, ch); 
-		while (USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET);
-		USART_ClearFlag(UART4,USART_FLAG_TC); 	
-}
-
-
-void USART4_SendStringData(uint16_t *st)
-{
-		while(*st!='\0')
-		{
-			USART1_SendData(*st);
-			st++;
-		}
-}
-
-/*Printf*/
-static void  SerWrStr (const char * tx_str)
+void USART3_SerWrStr(const char * tx_str)
 {
     while ((*tx_str) != 0)
 		{
-		if( (*tx_str) == '\n' )
-		{
-				USART3_SendData('\r');
-				USART3_SendData('\n');
-		}
-		else
-		{
-				USART3_SendData(*tx_str);
-		}
-		
+				if( (*tx_str) == '\n' )
+				{
+						USART3_SendData('\r');
+						USART3_SendData('\n');
+				}
+				else
+				{
+						USART3_SendData(*tx_str);
+				}
+
 				tx_str++;
     }
+		
+		return;
 }
 
-void  SerPrintf(const  char *format, ...)
+void  USART3_Printf(const  char *format, ...)
 {
 		static	char buffer[255];
 		va_list	vArgs;
@@ -241,7 +205,54 @@ void  SerPrintf(const  char *format, ...)
 		vsprintf((char *)buffer, (char const *)format, vArgs);
 		va_end(vArgs);
 
-		SerWrStr((char*) buffer);
+		USART3_SerWrStr((char*) buffer);
+	
+		return;
+}
+
+
+/*USART4 Fun*/
+void UART4_SendData(uint8_t ch)
+{
+		while (USART_GetFlagStatus(UART4, USART_FLAG_TC) == RESET){}
+	  USART_SendData(UART4, ch); 
+	
+		return;
+}
+
+
+static void  UART4_SerWrStr (const char * tx_str)
+{
+    while ((*tx_str) != 0)
+		{
+		if( (*tx_str) == '\n' )
+		{
+				UART4_SendData('\r');
+				UART4_SendData('\n');
+		}
+		else
+		{
+				UART4_SendData(*tx_str);
+		}
+		
+				tx_str++;
+    }
+		
+		return;
+}
+
+void  UART4_Printf(const  char *format, ...)
+{
+		static	char buffer[255];
+		va_list	vArgs;
+
+		va_start(vArgs, format);
+		vsprintf((char *)buffer, (char const *)format, vArgs);
+		va_end(vArgs);
+
+		UART4_SerWrStr((char*) buffer);
+	
+		return;
 }
 
 

@@ -40,7 +40,6 @@ int  main (void)
 #endif
 	
 		RecF = OSSemCreate(0);/*event*/
-		ActionInit();
 	
 		/*creat signal task*/
 		OSTaskCreateExt(SignalTask,	
@@ -104,15 +103,15 @@ static void ModbusTask(void *p_arg)
 static void SignalTask(void *p_arg)
 {	
 	 (void)p_arg;
-
+	
+	 USART1_Printf("Into signal task\n");
 	 for(;;)
 	 {	  	  		
 				if(disposeFlag)
-				{
-						disposeFlag = 0;
-						Dispose();
-				}	
-				KeyScan();
+				{	
+					Dispose();
+					disposeFlag=0;
+				}
 				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }
@@ -123,10 +122,6 @@ static void MainTask(void *p_arg)
 
 	 for(;;)
 	 {	  	  		 
-				NormalWork();
-				EmergencyDispose();
-				ResetDispose();
-				GridDispose();
 				OSTimeDlyHMSM(0, 0, 0, 10); 
 	 }
 }

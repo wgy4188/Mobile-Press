@@ -209,9 +209,6 @@ void TIM2_IRQHandler()
 {
 		if(TIM_GetITStatus(TIM2 , TIM_IT_Update) != RESET)
 		{	
-				if(setTime>0)setTime--;
-				USART1_Printf("n_time.val=%d",setTime);
-				ComStop();
 				TIM_ClearFlag(TIM2,TIM_IT_Update);
 		}
 }
